@@ -11,20 +11,18 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
  * @dev All transfers can be monitored by token event listener
  */
 contract ManagedToken is ERC20, ERC20Detailed, Ownable {
+    bool private _allowTransfer = false;
 
-    bool public allowTransfers = false;
-
-    event AllowTransfersChanged(bool _newState);
-    event Destroy(address indexed _from, uint256 _value);
+    event AllowTransfersChanged(bool _state);
 
     modifier transfersAllowed() {
-        require(allowTransfers);
+        require(_allowTransfer);
         _;
     }
 
     /**
      * @dev ManagedToken constructor
-     * @param _owner Owner
+     * @param _owner: Owner
      */
     constructor(string memory _name, string memory _symbol, uint8 _decimals, address _owner) public ERC20Detailed(_name, _symbol, _decimals) {
 		_transferOwnership(_owner);
@@ -32,11 +30,16 @@ contract ManagedToken is ERC20, ERC20Detailed, Ownable {
 
     /**
      * @dev Enable/disable token transfers. Can be called only by owners
-     * @param _allowTransfers True - allow False - disable
+     * @param _state: true - allow / false - disable
      */
-    function setAllowTransfers(bool _allowTransfers) external onlyOwner {
-        allowTransfers = _allowTransfers;
-        emit AllowTransfersChanged(_allowTransfers);
+    function setAllowTransfers(bool _state) external onlyOwner returns (bool) {
+        _allowTransfer = _state;
+        emit AllowTransfersChanged(_allowTransfer);
+        return true;
+    }
+    
+    function allowTransfer() public view returns (bool) {
+        return _allowTransfer;
     }
 
     /**

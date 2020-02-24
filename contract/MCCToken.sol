@@ -15,9 +15,9 @@ contract MCCToken is TransferLimitedToken {
 
     mapping(address => bool) public multiTransferSenderWallets;
 
-    event SetOwner(address indexed owner);
+    event SetOwner(address indexed _owner);
     event SetSeedPublisher(address indexed _seedPublisher);
-    event Burn(address indexed burner, uint256 value);
+    event Goodmorn(uint256 _refKey, uint256 _from, uint256 _to, uint8 _seed, string _penalty, string _senderCountry, string _sendTime);
 
     modifier onlyManager() {
         require(msg.sender == _tokenManager, "msg.sender is not token manager");
@@ -51,7 +51,9 @@ contract MCCToken is TransferLimitedToken {
 
     function () external payable {}
     
-    function goodmorn(uint256 refKey, uint256 from, uint256 to, uint8 seed, string calldata penalty) onlySeedPublisher external payable {}
+    function goodmorn(uint256 _refKey, uint256 _from, uint256 _to, uint8 _seed, string calldata _penalty, string calldata _senderCountry, string calldata _sendTime) onlySeedPublisher external payable {
+        emit Goodmorn(_refKey, _from, _to, _seed, _penalty, _senderCountry, _sendTime);
+    }
     
     function refund() external onlyOwner {
         _transfer(address(this), msg.sender, address(this).balance);
@@ -59,11 +61,12 @@ contract MCCToken is TransferLimitedToken {
     
     /**
      * @dev set token owner who can set token limitation
-     * @param _owner token owner
+     * @param _owner: token owner
      */
-    function setOwner(address _owner) external onlyManager {
+    function setOwner(address _owner) external onlyManager returns (bool) {
         _transferOwnership(_owner);
         emit SetOwner(_owner);
+        return true;
     }
     
     function manager() public view returns (address) {
@@ -72,22 +75,29 @@ contract MCCToken is TransferLimitedToken {
     
     /**
      * @dev set seed publisher who can set seed publisher
-     * @param _publisher seed publisher
+     * @param _publisher: seed publisher
      */
-    function setSeedPublisher(address _publisher) external onlyOwner {
+    function setSeedPublisher(address _publisher) external onlyOwner returns (bool) {
         _seedPublisher = _publisher;
         emit SetSeedPublisher(_publisher);
+        return true;
     }
 
     function seedPublisher() public view returns (address) {
         return _seedPublisher;
     }
     
-    function setMultiTransferSenderWalletAddress(address _wallet, bool approval) public onlyOwner {
-        multiTransferSenderWallets[_wallet] = approval;
+    /**
+     * @dev set sender who who can use multiple transfer
+     * @param _wallet: sender
+     * @param _approval: true / false
+     */
+    function setMultiTransferSenderWalletAddress(address _wallet, bool _approval) public onlyOwner returns (bool) {
+        multiTransferSenderWallets[_wallet] = _approval;
+        return true;
     }
 
-    function isMultiTransferSenderWalletAddress(address _wallet) public view returns(bool) {
+    function isMultiTransferSenderWalletAddress(address _wallet) public view returns (bool) {
         return multiTransferSenderWallets[_wallet];
     }
 

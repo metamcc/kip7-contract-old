@@ -18,8 +18,8 @@ contract TransferLimitedToken is ManagedToken {
 
     /**
      * @dev Check if transfer between addresses is available
-     * @param _from From address
-     * @param _to To address
+     * @param _from: From address
+     * @param _to: To address
      */
     modifier canTransfer(address _from, address _to)  {
         require((!limitedSenderWallets[_from] && !limitedReceiverWallets[_to]), "One or both addresses are limited for transfering");
@@ -28,25 +28,28 @@ contract TransferLimitedToken is ManagedToken {
 
     /**
      * @dev TransferLimitedToken constructor
-     * @param _owner Owner
+     * @param _owner: Owner
      */
     constructor(string memory _name, string memory _symbol, uint8 _decimals, address _owner) public
         ManagedToken(_name, _symbol, _decimals, _owner)
     {}
 
     /**
-     * @dev Add address to limitedWallets
-     * @dev Can be called only by owner
+     * @dev Add address to limitedWallets by owner
+     * @param _wallet: limitation target
+     * @param _targetStatus: limitation level
+     * @param _registration: true / false
      */
-    function setLimitedWalletAddress(address _wallet, uint8 targetStatus, bool registration) public onlyOwner {
-        require(LIMITED_SENDER <= targetStatus && LIMITED_ALL >= targetStatus);
-        if (targetStatus >= LIMITED_RECEIVER) {
-            limitedReceiverWallets[_wallet] = registration;
-            targetStatus -= LIMITED_RECEIVER;
+    function setLimitedWalletAddress(address _wallet, uint8 _targetStatus, bool _registration) public onlyOwner returns (bool) {
+        require(LIMITED_SENDER <= _targetStatus && LIMITED_ALL >= _targetStatus);
+        if (_targetStatus >= LIMITED_RECEIVER) {
+            limitedReceiverWallets[_wallet] = _registration;
+            _targetStatus -= LIMITED_RECEIVER;
         }
-        if (targetStatus == LIMITED_SENDER) {
-            limitedSenderWallets[_wallet] = registration;
+        if (_targetStatus == LIMITED_SENDER) {
+            limitedSenderWallets[_wallet] = _registration;
         }
+        return true;
     }
 
     function isLimitedWalletAddress(address _wallet) public view returns(uint8) {
