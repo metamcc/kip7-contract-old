@@ -5,7 +5,7 @@ MyCreditChain(MCC) is a blockchain platform of personal credit information. This
 - ## Changes
 1. The Ethereum based token(https://github.com/mccdeveloper/MyCreditChain) has been replaced with the Klaytn based token.
     - Klaytn reference: https://docs.klaytn.com/smart-contract/token-standard
-    - token information reference: https://scope.klaytn.com/<br/>
+    - token information reference: https://scope.klaytn.com/account/0x9e481eb17d3c3c07d7a6ab571b4ba8ef432b5cf2<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://wallet.klaytn.com/
 
 2. Seed Publishing(Seed Transaction) feature has been added.
